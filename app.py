@@ -25,6 +25,11 @@ KITCHEN_LAYOUT = [
     # Row 8: Lower cabinets
     ["TOMATO", "POTATO", "FREE_WORK", "FREE_WORK", "FREE_WORK", "BOARD", "FREE_WORK", "PAN", "FREE_WORK", "FREE_WORK", "PLATES", "FREE_WORK"]
 ]
+FPS = 30
+SERVICE_DURATION_SEC = 180
+SERVICE_DURATION_FRAMES = SERVICE_DURATION_SEC * FPS
+MAX_FAILURES = 3
+
 
 class App:
     def __init__(self):
@@ -33,10 +38,15 @@ class App:
         self.__chef1 = Chef(chef_id=1, start_col=5, start_row=2)  
         self.__chef2 = Chef(chef_id=2, start_col=5, start_row=6) 
 
+        self.__score = 0
+        self.__failures = 0
+        self.__timer_frames = SERVICE_DURATION_FRAMES
+
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        pass
+        if self.__timer_frames > 0:
+            self.__timer_frames -= 1
 
     def draw(self):
         # Clear the screen with a white color
