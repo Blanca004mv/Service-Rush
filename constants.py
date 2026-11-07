@@ -44,21 +44,21 @@ RECIPES = {
         "ingredients": ("CHOPPED_TOMATO", "CHOPPED_ONION"),
         "equipment": "BLENDER",
         "points": 10,
-        "time_limit": 48 * FPS,
+        "time_limit": 48,
         "penalty": -5
     },
     "SPANISH_OMELETTE": {
         "ingredients": ("CHOPPED_POTATO", "CHOPPED_ONION", "EGG"),
         "equipment": "PAN",
         "points": 12,
-        "time_limit": 60 * FPS,
+        "time_limit": 60,
         "penalty": -6
     },
     "BROKEN_EGGS": {
         "ingredients": ("CHOPPED_POTATO", "EGG", "CHOPPED_CHORIZO"),
         "equipment": "PAN",
         "points": 12,
-        "time_limit": 60 * FPS,
+        "time_limit": 60,
         "penalty": -6
     }
 }
@@ -73,7 +73,7 @@ SPRITES = {
     "onion_chopped": (32, 32), "chorizo_chopped": (48, 32),
     # Plates
     "dish_empty": (0, 48), "gazpacho": (16, 48),
-    "omelette": (32, 48), "broken_eggs": (48, 48),
+    "spanish_omelette": (32, 48), "broken_eggs": (48, 48),
     # Equipment
     "board": (0, 64), "blender": (16, 64), "pan": (32, 64),
     "plates": (48, 64), "bin": (64, 64),
@@ -97,3 +97,7 @@ CHEF_SPRITES = {
 
 VALID_INGREDIENTS = ("tomato", "potato", "onion", "chorizo", "egg")
 VALID_STATES = ("raw", "chopped", "blended", "cooked")
+
+FIRST_ORDER_DELAY_SEC = 3       
+ORDER_SPAWN_INTERVAL_SEC = 15
+MAX_WAITING_ORDERS = 3
