@@ -12,7 +12,7 @@ KITCHEN_LAYOUT = [
     # Row 3: Chef´s floor
     ["FREE"] * 12,
     # Row 4: Division counter
-    ["WALL", "PASS", "WALL", "PASS", "WALL", "BIN", "WALL", "PASS", "WALL", "WALL", "PASS", "WALL"],
+    ["WALL", "PASS", "WALL", "PASS", "WALL", "BIN", "WALL", "PASS", "WALL", "SINK", "PASS", "WALL"],
     # Row 5: Chef´s floor
     ["FREE"] * 12,
     # Row 6: Chef´s floor
@@ -20,7 +20,7 @@ KITCHEN_LAYOUT = [
     # Row 7: Chef´s floor
     ["FREE"] * 12,
     # Row 8: Lower cabinets
-    ["TOMATO", "POTATO", "FREE_WORK", "FREE_WORK", "FREE_WORK", "BOARD", "FREE_WORK", "PAN", "FREE_WORK", "FREE_WORK", "PLATES", "FREE_WORK"]
+    ["TOMATO", "POTATO", "FREE_WORK", "FREE_WORK", "FREE_WORK", "BOARD", "FREE_WORK", "PAN", "FREE_WORK", "RETURN", "PLATES", "FREE_WORK"]
 ]
 
 FPS = 30
