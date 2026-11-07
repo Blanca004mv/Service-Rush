@@ -97,7 +97,3 @@ CHEF_SPRITES = {
 
 VALID_INGREDIENTS = ("tomato", "potato", "onion", "chorizo", "egg")
 VALID_STATES = ("raw", "chopped", "blended", "cooked")
-
-FIRST_ORDER_DELAY_SEC = 3       
-ORDER_SPAWN_INTERVAL_SEC = 15
-MAX_WAITING_ORDERS = 3
