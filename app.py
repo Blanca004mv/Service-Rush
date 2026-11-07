@@ -13,6 +13,7 @@ from blender import Blender
 from plates import Plates
 from return_ import Return
 from serve import Serve
+from ingredient import Ingredient
 
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, SPRITES
 
@@ -40,6 +41,7 @@ class App:
         self.__plates = None
         self.__return = None
         self.__serve = None
+        self.__ingredients = []
 
         for row, row_items in enumerate(KITCHEN_LAYOUT):
             for col, item in enumerate(row_items):
@@ -67,6 +69,9 @@ class App:
                     self.__return = Return(col, row)
                 elif item == "SERVE":
                     self.__serve = Serve(col, row)
+                elif item in ("ONION", "EGG", "CHORIZO", "TOMATO", "POTATO"):
+                    item_lower = item.lower()
+                    self.__ingredients.append(Ingredient(col, row, item_lower))
 
         pyxel.run(self.update, self.draw)
 
@@ -127,6 +132,10 @@ class App:
 
         # Draw serve
         self.__serve.draw()
+
+        # Draw ingredients
+        for ingredient in self.__ingredients:
+            ingredient.draw()
 
         # Draw chefs
         self.__chef1.draw()

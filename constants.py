@@ -94,3 +94,6 @@ CHEF_SPRITES = {
     2: {"front": (0, 112), "back": (16, 112), "side": (32, 112),
         "front_plate": (48, 112), "back_plate": (64, 112), "side_plate": (80, 112)},
 }
+
+VALID_INGREDIENTS = ("tomato", "potato", "onion", "chorizo", "egg")
+VALID_STATES = ("raw", "chopped", "blended", "cooked")
