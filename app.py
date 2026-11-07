@@ -8,6 +8,7 @@ from wall import Wall
 from worktop import Worktop
 from handover import Handover
 from board import Board
+from sink import Sink
 
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, SPRITES
 
@@ -30,6 +31,7 @@ class App:
         self.__worktops = []
         self.__handovers = []
         self.__boards = []
+        self.__sink = None
 
         for row, row_items in enumerate(KITCHEN_LAYOUT):
             for col, item in enumerate(row_items):
@@ -47,6 +49,8 @@ class App:
                     self.__handovers.append(Handover(col, row))
                 elif item == "BOARD":
                     self.__boards.append(Board(col, row))
+                elif item == "SINK":
+                    self.__sink = Sink(col, row)
 
         pyxel.run(self.update, self.draw)
 
@@ -92,6 +96,9 @@ class App:
         # Draw boards
         for board in self.__boards:
             board.draw()
+
+        # Draw sink
+        self.__sink.draw()
 
         # Draw chefs
         self.__chef1.draw()
