@@ -76,3 +76,13 @@ class App:
         # Draw chefs
         self.__chef1.draw()
         self.__chef2.draw()
+
+        # Draw score, failures, and timer
+        total_sec = self.__timer_frames // FPS
+        minutos = total_sec // 60
+        segundos = total_sec % 60
+        time_str = f"{minutos:02d}:{segundos:02d}"
+
+        pyxel.text(2, 4, f"SCORE: {self.__score}", 7)        
+        pyxel.text(2, 13, f"FAILURES: {self.__failures}/{MAX_FAILURES}", 7)
+        pyxel.text(2, 22, f"TIME: {time_str}", 7)
