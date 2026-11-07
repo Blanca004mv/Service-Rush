@@ -88,3 +88,10 @@ class Chef:
         if not isinstance(value, bool):
             raise ValueError("Has dish must be a boolean.")
         self.__has_dish = value
+
+    # Draw the chef on the screen
+    def draw(self):
+        x = self.col * 16
+        y = 32 + (self.row * 16)  
+        # Draw the chef as a blue circle of radius 8      
+        pyxel.circ(x + 8, y + 8, 8, 5) 

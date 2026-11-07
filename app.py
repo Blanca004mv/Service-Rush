@@ -1,4 +1,5 @@
 import pyxel
+from chef import Chef
 
 # Global constants
 SCREEN_WIDTH = 192
@@ -28,8 +29,11 @@ KITCHEN_LAYOUT = [
 class App:
     def __init__(self):
         pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Service Rush", display_scale=3)
-        pyxel.run(self.update, self.draw)
+        
+        self.__chef1 = Chef(chef_id=1, start_col=5, start_row=2)  
+        self.__chef2 = Chef(chef_id=2, start_col=5, start_row=6) 
 
+        pyxel.run(self.update, self.draw)
 
     def update(self):
         pass
@@ -58,3 +62,7 @@ class App:
                     pyxel.rect(x, y, 16, 16, 4)  # Brown for free work areas
                 else:
                     pyxel.rect(x, y, 16, 16, 11)  # Green for items
+
+        # Draw chefs
+        self.__chef1.draw()
+        self.__chef2.draw()
