@@ -1,6 +1,7 @@
 import pyxel
 from chef import Chef
 from floor import Floor
+from pan import Pan
 
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, SPRITES
 
@@ -17,11 +18,14 @@ class App:
         self.__timer_frames = SERVICE_DURATION_FRAMES
 
         self.__floors = []
-        # Instantiate the "FREE" tiles
+        self.__pan = None
+
         for row, row_items in enumerate(KITCHEN_LAYOUT):
             for col, item in enumerate(row_items):
                 if item == "FREE":
                     self.__floors.append(Floor(col, row))
+                elif item == "PAN":
+                    self.__pan = Pan(col, row)
 
         pyxel.run(self.update, self.draw)
 
@@ -57,6 +61,13 @@ class App:
                     pyxel.rect(x, y, 16, 16, 4)  # Brown for free work areas
                 else:
                     pyxel.rect(x, y, 16, 16, 11)  # Green for items
+
+        # Draw floor
+        for floor in self.__floors:
+            floor.draw()
+
+        # Draw pan
+        self.__pan.draw()
 
         # Draw chefs
         self.__chef1.draw()
