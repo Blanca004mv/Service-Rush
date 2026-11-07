@@ -56,9 +56,6 @@ class Pan:
         x = self.col * 16
         y = BOARD_HEIGHT + (self.row * 16)
 
-        # Draw worktop
-        u_bg, v_bg = SPRITES["worktop"]
-        pyxel.blt(x, y, 0, u_bg, v_bg, 16, 16)
 
         # Draw pan
         u, v = SPRITES["pan"]
