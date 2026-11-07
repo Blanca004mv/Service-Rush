@@ -2,6 +2,7 @@ import pyxel
 from chef import Chef
 from floor import Floor
 from pan import Pan
+from bin import Bin
 
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, SPRITES
 
@@ -19,6 +20,7 @@ class App:
 
         self.__floors = []
         self.__pan = None
+        self.__bin = None
 
         for row, row_items in enumerate(KITCHEN_LAYOUT):
             for col, item in enumerate(row_items):
@@ -26,6 +28,8 @@ class App:
                     self.__floors.append(Floor(col, row))
                 elif item == "PAN":
                     self.__pan = Pan(col, row)
+                elif item == "BIN":
+                    self.__bin = Bin(col, row)
 
         pyxel.run(self.update, self.draw)
 
@@ -68,6 +72,9 @@ class App:
 
         # Draw pan
         self.__pan.draw()
+
+        # Draw bin
+        self.__bin.draw()
 
         # Draw chefs
         self.__chef1.draw()
