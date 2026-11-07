@@ -1,74 +1,12 @@
 import pyxel
 from chef import Chef
 
-# Global constants
-SCREEN_WIDTH = 192
-SCREEN_HEIGHT = 176
-BOARD_HEIGHT = 32
-KITCHEN_LAYOUT = [
-    # Row 0: Upper cabinets
-    ["ONION", "EGG", "CHORIZO", "FREE_WORK", "BOARD", "FREE_WORK", "BLENDER", "FREE_WORK", "FREE_WORK", "FREE_WORK", "FREE_WORK", "SERVE"],
-    # Row 1: Chef´s floor
-    ["FREE"] * 12,
-    # Row 2: Chef´s floor
-    ["FREE"] * 12,
-    # Row 3: Chef´s floor
-    ["FREE"] * 12,
-    # Row 4: Division counter
-    ["WALL", "PASS", "WALL", "PASS", "WALL", "BIN", "WALL", "PASS", "WALL", "WALL", "PASS", "WALL"],
-    # Row 5: Chef´s floor
-    ["FREE"] * 12,
-    # Row 6: Chef´s floor
-    ["FREE"] * 12,
-    # Row 7: Chef´s floor
-    ["FREE"] * 12,
-    # Row 8: Lower cabinets
-    ["TOMATO", "POTATO", "FREE_WORK", "FREE_WORK", "FREE_WORK", "BOARD", "FREE_WORK", "PAN", "FREE_WORK", "FREE_WORK", "PLATES", "FREE_WORK"]
-]
-
-FPS = 30
-SERVICE_DURATION_SEC = 180
-SERVICE_DURATION_FRAMES = SERVICE_DURATION_SEC * FPS
-MAX_FAILURES = 3
-
-SCORE_X = 135
-SCORE_Y = 4
-
-FAILURES_X = 135
-FAILURES_Y = 13
-
-TIMER_X = 135
-TIMER_Y = 22
-
-TEXT_COLOR = 7
-
-RECIPES = {
-    "GAZPACHO": {
-        "ingredients": ("CHOPPED_TOMATO", "CHOPPED_ONION"),
-        "equipment": "BLENDER",
-        "points": 10,
-        "time_limit": 48 * FPS,
-        "penalty": -5
-    },
-    "SPANISH_OMELETTE": {
-        "ingredients": ("CHOPPED_POTATO", "CHOPPED_ONION", "EGG"),
-        "equipment": "PAN",
-        "points": 12,
-        "time_limit": 60 * FPS,
-        "penalty": -6
-    },
-    "BROKEN_EGGS": {
-        "ingredients": ("CHOPPED_POTATO", "EGG", "CHOPPED_CHORIZO"),
-        "equipment": "PAN",
-        "points": 12,
-        "time_limit": 60 * FPS,
-        "penalty": -6
-    }
-}
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR
 
 class App:
     def __init__(self):
         pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Service Rush", display_scale=3)
+        pyxel.load("assets/resources.pyxres")
         
         self.__chef1 = Chef(chef_id=1, start_col=5, start_row=2)  
         self.__chef2 = Chef(chef_id=2, start_col=5, start_row=6) 

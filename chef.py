@@ -1,4 +1,5 @@
 import pyxel
+from constants import BOARD_HEIGHT, CHEF_SPRITES
 
 class Chef:
     def __init__(self, chef_id, start_col, start_row):
@@ -92,6 +93,29 @@ class Chef:
     # Draw the chef on the screen
     def draw(self):
         x = self.col * 16
-        y = 32 + (self.row * 16)  
-        # Draw the chef as a blue circle of radius 8      
-        pyxel.circ(x + 8, y + 8, 8, 5) 
+        y = BOARD_HEIGHT + (self.row * 16)  
+
+        if self.direction == "DOWN":
+            if self.has_dish:
+                state = "front_plate"
+            else:
+                state = "front"
+        elif self.direction == "UP":
+            if self.has_dish:
+                state = "back_plate"
+            else:
+                state = "back"
+        else:
+            if self.has_dish:
+                state = "side_plate"
+            else:
+                state = "side"
+
+        u, v = CHEF_SPRITES[self.chef_id][state]
+
+        if self.direction == "LEFT":
+            w = -16
+        else:
+            w = 16
+
+        pyxel.blt(x, y, 0, u, v, w, 16, 0)
