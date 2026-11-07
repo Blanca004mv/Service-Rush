@@ -5,6 +5,7 @@ from pan import Pan
 from bin import Bin
 from wall import Wall
 from worktop import Worktop
+from handover import Handover
 
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, SPRITES
 
@@ -25,6 +26,7 @@ class App:
         self.__bin = None
         self.__walls = []
         self.__worktops = []
+        self.__handovers = []
 
         for row, row_items in enumerate(KITCHEN_LAYOUT):
             for col, item in enumerate(row_items):
@@ -38,6 +40,8 @@ class App:
                     self.__walls.append(Wall(col, row))
                 elif item == "FREE_WORK":
                     self.__worktops.append(Worktop(col, row))
+                elif item == "PASS":
+                    self.__handovers.append(Handover(col, row))
 
         pyxel.run(self.update, self.draw)
 
@@ -56,16 +60,6 @@ class App:
         for floor in self.__floors:
             floor.draw()
 
-        # Draw kitchen layout
-        for row, row_item in enumerate(KITCHEN_LAYOUT):
-            for col, item in enumerate(row_item):
-                x = col * 16
-                y = row * 16 + BOARD_HEIGHT
-                if item == "PASS":
-                    pyxel.rect(x, y, 16, 16, 10)  # Yellow for pass-through areas
-                
-                else:
-                    pyxel.rect(x, y, 16, 16, 11)  # Green for items
 
         # Draw kitchen layout 
         # Draw floor
@@ -85,6 +79,10 @@ class App:
         # Draw worktops
         for worktop in self.__worktops:
             worktop.draw()
+
+        # Draw handover
+        for handover in self.__handovers:
+            handover.draw()
 
         # Draw chefs
         self.__chef1.draw()
