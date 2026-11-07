@@ -25,11 +25,46 @@ KITCHEN_LAYOUT = [
     # Row 8: Lower cabinets
     ["TOMATO", "POTATO", "FREE_WORK", "FREE_WORK", "FREE_WORK", "BOARD", "FREE_WORK", "PAN", "FREE_WORK", "FREE_WORK", "PLATES", "FREE_WORK"]
 ]
+
 FPS = 30
 SERVICE_DURATION_SEC = 180
 SERVICE_DURATION_FRAMES = SERVICE_DURATION_SEC * FPS
 MAX_FAILURES = 3
 
+SCORE_X = 135
+SCORE_Y = 4
+
+FAILURES_X = 135
+FAILURES_Y = 13
+
+TIMER_X = 135
+TIMER_Y = 22
+
+TEXT_COLOR = 7
+
+RECIPES = {
+    "GAZPACHO": {
+        "ingredients": ("CHOPPED_TOMATO", "CHOPPED_ONION"),
+        "equipment": "BLENDER",
+        "points": 10,
+        "time_limit": 48 * FPS,
+        "penalty": -5
+    },
+    "SPANISH_OMELETTE": {
+        "ingredients": ("CHOPPED_POTATO", "CHOPPED_ONION", "EGG"),
+        "equipment": "PAN",
+        "points": 12,
+        "time_limit": 60 * FPS,
+        "penalty": -6
+    },
+    "BROKEN_EGGS": {
+        "ingredients": ("CHOPPED_POTATO", "EGG", "CHOPPED_CHORIZO"),
+        "equipment": "PAN",
+        "points": 12,
+        "time_limit": 60 * FPS,
+        "penalty": -6
+    }
+}
 
 class App:
     def __init__(self):
@@ -83,6 +118,6 @@ class App:
         segundos = total_sec % 60
         time_str = f"{minutos:02d}:{segundos:02d}"
 
-        pyxel.text(2, 4, f"SCORE: {self.__score}", 7)        
-        pyxel.text(2, 13, f"FAILURES: {self.__failures}/{MAX_FAILURES}", 7)
-        pyxel.text(2, 22, f"TIME: {time_str}", 7)
+        pyxel.text(SCORE_X, SCORE_Y, f"SCORE: {self.__score}", TEXT_COLOR)        
+        pyxel.text(FAILURES_X, FAILURES_Y, f"FAILURES: {self.__failures}/{MAX_FAILURES}", TEXT_COLOR)
+        pyxel.text(TIMER_X, TIMER_Y, f"TIME: {time_str}", TEXT_COLOR)
