@@ -3,6 +3,8 @@ from chef import Chef
 from floor import Floor
 from pan import Pan
 from bin import Bin
+from wall import Wall
+from worktop import Worktop
 
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS, SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y, FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, SPRITES
 
@@ -21,6 +23,8 @@ class App:
         self.__floors = []
         self.__pan = None
         self.__bin = None
+        self.__walls = []
+        self.__worktops = []
 
         for row, row_items in enumerate(KITCHEN_LAYOUT):
             for col, item in enumerate(row_items):
@@ -30,6 +34,10 @@ class App:
                     self.__pan = Pan(col, row)
                 elif item == "BIN":
                     self.__bin = Bin(col, row)
+                elif item == "WALL":
+                    self.__walls.append(Wall(col, row))
+                elif item == "FREE_WORK":
+                    self.__worktops.append(Worktop(col, row))
 
         pyxel.run(self.update, self.draw)
 
@@ -53,19 +61,13 @@ class App:
             for col, item in enumerate(row_item):
                 x = col * 16
                 y = row * 16 + BOARD_HEIGHT
-                if item == "FREE":
-                    pyxel.rect(x, y, 16, 16, 7)  # White for free space
-                elif item == "WALL":
-                    pyxel.rect(x, y, 16, 16, 13)  # Grey for walls
-                elif item == "PASS":
+                if item == "PASS":
                     pyxel.rect(x, y, 16, 16, 10)  # Yellow for pass-through areas
-                elif item == "BIN":
-                    pyxel.rect(x, y, 16, 16, 8)  # Red gray for bin
-                elif item == "FREE_WORK":
-                    pyxel.rect(x, y, 16, 16, 4)  # Brown for free work areas
+                
                 else:
                     pyxel.rect(x, y, 16, 16, 11)  # Green for items
 
+        # Draw kitchen layout 
         # Draw floor
         for floor in self.__floors:
             floor.draw()
@@ -75,6 +77,14 @@ class App:
 
         # Draw bin
         self.__bin.draw()
+
+        # Draw walls
+        for wall in self.__walls:
+            wall.draw()
+
+        # Draw worktops
+        for worktop in self.__worktops:
+            worktop.draw()
 
         # Draw chefs
         self.__chef1.draw()
