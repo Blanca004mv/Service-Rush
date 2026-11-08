@@ -28,34 +28,31 @@ SERVICE_DURATION_SEC = 180
 SERVICE_DURATION_FRAMES = SERVICE_DURATION_SEC * FPS
 MAX_FAILURES = 3
 
-SCORE_X = 135
+BOARD_MARGIN_RIGHT = 2
+Y_SEPARATION = 9
 SCORE_Y = 4
-
-FAILURES_X = 135
-FAILURES_Y = 13
-
-TIMER_X = 135
-TIMER_Y = 22
+FAILURES_Y = SCORE_Y + Y_SEPARATION
+TIMER_Y = FAILURES_Y + Y_SEPARATION
 
 TEXT_COLOR = 7
 
 RECIPES = {
     "GAZPACHO": {
-        "ingredients": ("CHOPPED_TOMATO", "CHOPPED_ONION"),
+        "ingredients": ("TOMATO_CHOPPED", "ONION_CHOPPED"),
         "equipment": "BLENDER",
         "points": 10,
         "time_limit": 48,
         "penalty": -5
     },
     "SPANISH_OMELETTE": {
-        "ingredients": ("CHOPPED_POTATO", "CHOPPED_ONION", "EGG"),
+        "ingredients": ("POTATO_CHOPPED", "ONION_CHOPPED", "EGG"),
         "equipment": "PAN",
         "points": 12,
         "time_limit": 60,
         "penalty": -6
     },
     "BROKEN_EGGS": {
-        "ingredients": ("CHOPPED_POTATO", "EGG", "CHOPPED_CHORIZO"),
+        "ingredients": ("POTATO_CHOPPED", "EGG", "CHORIZO_CHOPPED"),
         "equipment": "PAN",
         "points": 12,
         "time_limit": 60,
@@ -101,3 +98,28 @@ VALID_STATES = ("raw", "chopped", "blended", "cooked")
 FIRST_ORDER_DELAY_SEC = 3       
 ORDER_SPAWN_INTERVAL_SEC = 15
 MAX_WAITING_ORDERS = 3
+
+TICKET_WIDTH = 43           
+TICKET_HEIGHT = 24          
+TICKET_BG_COLOR = 3         
+TICKET_TEXT_COLOR_NORMAL = 0 
+TICKET_TEXT_COLOR_URGENT = 8 
+TICKET_SPACING_X = 48       
+TICKET_CRITICAL_TIME_SEC = 10
+DISH_X_SPACING = 2
+DISH_Y_SPACING = 4
+SECONDS_LEFT_X_SPACING = 22
+SECONDS_LEFT_Y_SPACING = 16
+INGREDIENT_X_SPACING = 16
+INGREDIENT_Y_SPACING = 2
+INGREDIENT_SEPARATION = 7
+INGREDIENTE_SCALE = 0.5
+ITEM_SIZE = 16
+ORDER_X = 4
+ORDER_Y = 4
+ORDER_SPACING = 47
+
+MAX_COLUMNS = 11
+MIN_COLUMNS = 0
+MAX_ROWS = 8
+MIN_ROWS = 0

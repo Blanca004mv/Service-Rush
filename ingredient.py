@@ -1,46 +1,14 @@
 import pyxel
+from item import Item
 from constants import BOARD_HEIGHT, SPRITES, VALID_INGREDIENTS, VALID_STATES
 
 
-class Ingredient:
+class Ingredient(Item):
 
     def __init__(self, col, row, name, state = "raw"):
-        self.col = col
-        self.row = row
+        super().__init__(col, row)
         self.name = name
         self.state = state
-    
-    # Col property
-    @property
-    def col(self):
-        return self.__col   
-    
-    # Col setter
-    @col.setter
-    def col(self, value:int):       
-        # Check if its an integer
-        if not isinstance(value, int):
-            raise ValueError("Column must be an integer.")
-        # Check if the value is between 0 and 11
-        if not (0 <= value <= 11):
-            raise ValueError("Column must be between 0 and 11.")
-        self.__col = value
-
-    # Row property
-    @property
-    def row(self):
-        return self.__row
-
-    # Row setter
-    @row.setter
-    def row(self, value:int):
-        # Check if its an integer
-        if not isinstance(value, int):
-            raise ValueError("Row must be an integer.")
-        # Check if the value is between 0 and 8
-        if not (0 <= value <= 8):
-            raise ValueError("Row must be between 0 and 8.")
-        self.__row = value
     
     # Name property
     @property
@@ -79,12 +47,9 @@ class Ingredient:
             self.state = "chopped"
 
     def draw(self):
-        x = self.col * 16
-        y = BOARD_HEIGHT + (self.row * 16)
-
-        # Draw worktop
-        u_w, v_w = SPRITES["worktop"]
-        pyxel.blt(x, y, 0, u_w, v_w, 16, 16, 0)
+        # Draw drawer
+        u_w, v_w = SPRITES["drawer"]
+        pyxel.blt(self.x, self.y, 0, u_w, v_w, 16, 16, 0)
 
         # Draw ingredient
         if self.state == "chopped":
@@ -94,4 +59,6 @@ class Ingredient:
 
         if sprite_key in SPRITES:
             u, v = SPRITES[sprite_key]
-            pyxel.blt(x, y, 0, u, v, 16, 16, 0)
+            pyxel.blt(self.x, self.y, 0, u, v, 16, 16, 0)
+
+        

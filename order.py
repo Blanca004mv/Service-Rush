@@ -1,8 +1,14 @@
 import pyxel
-from constants import RECIPES, FPS, SPRITES
+from constants import (
+    RECIPES, FPS, SPRITES, TICKET_WIDTH, TICKET_HEIGHT, TICKET_BG_COLOR, 
+    TICKET_TEXT_COLOR_NORMAL, TICKET_TEXT_COLOR_URGENT, TICKET_CRITICAL_TIME_SEC, 
+    DISH_X_SPACING, DISH_Y_SPACING, SECONDS_LEFT_X_SPACING, SECONDS_LEFT_Y_SPACING,
+    INGREDIENT_SEPARATION, INGREDIENT_X_SPACING, INGREDIENT_Y_SPACING, INGREDIENTE_SCALE,
+    ITEM_SIZE
+)
 
 
-class Order:
+class Order():
     def __init__(self, recipe_name: str):
         """Inicializa la orden delegando las validaciones a sus setters."""
         self.recipe_name = recipe_name
@@ -48,19 +54,27 @@ class Order:
 
     def draw(self, x: int, y: int):
         
-        seconds_left = max(0, self.__timer_frames // FPS)
+        # Draw ticket
+        pyxel.rect(x, y, TICKET_WIDTH, TICKET_HEIGHT, TICKET_BG_COLOR)
 
-        pyxel.rect(x, y, 38, 24, 7)
-
+        # Draw dish
         recipe_key_sprites = self.recipe_name.lower()
-        if recipe_key_sprites in SPRITES:
-            u, v = SPRITES[recipe_key_sprites]
-            pyxel.blt(x + 2, y + 4, 0, u, v, 16, 16, 0)
-        else:
-            # Texto de respaldo solo si la clave no estuviera en SPRITES
-            short_name = self.recipe_name[:4].upper()
-            pyxel.text(x + 3, y + 4, short_name, 0)
+        u, v = SPRITES[recipe_key_sprites]
+        pyxel.blt(x + DISH_X_SPACING, y + DISH_Y_SPACING, 0, u, v, ITEM_SIZE, ITEM_SIZE, 0)
 
-        
-        color_texto = 8 if seconds_left < 10 else 0
-        pyxel.text(x + 22, y + 10, f"{seconds_left}s", color_texto)
+        # Draw ingredients
+        ingredients_list = RECIPES[self.recipe_name]["ingredients"]
+        for idx, ing in enumerate(ingredients_list):
+            clean_ing = ing.lower().replace("_chopped", "")
+            ing_x = x + INGREDIENT_X_SPACING + (idx * INGREDIENT_SEPARATION)
+            ing_y = y + INGREDIENT_Y_SPACING            
+            u_ing, v_ing = SPRITES[clean_ing]
+            pyxel.blt(ing_x, ing_y, 0, u_ing, v_ing, ITEM_SIZE, ITEM_SIZE, colkey=0, scale=INGREDIENTE_SCALE)
+
+        # Draw seconds left
+        seconds_left = max(0, self.__timer_frames // FPS)
+        if seconds_left < TICKET_CRITICAL_TIME_SEC:
+            text_color = TICKET_TEXT_COLOR_URGENT
+        else:
+            text_color = TICKET_TEXT_COLOR_NORMAL
+        pyxel.text(x + SECONDS_LEFT_X_SPACING, y + SECONDS_LEFT_Y_SPACING, f"{seconds_left}s", text_color)

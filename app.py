@@ -19,9 +19,9 @@ from order import Order
 
 from constants import (
     SCREEN_WIDTH, SCREEN_HEIGHT, BOARD_HEIGHT, KITCHEN_LAYOUT, FPS,
-    SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_X, SCORE_Y,
-    FAILURES_X, FAILURES_Y, TIMER_X, TIMER_Y, TEXT_COLOR, RECIPES,
-    FIRST_ORDER_DELAY_SEC, ORDER_SPAWN_INTERVAL_SEC, MAX_WAITING_ORDERS
+    SERVICE_DURATION_FRAMES, MAX_FAILURES, SCORE_Y, FAILURES_Y, TIMER_Y, TEXT_COLOR, RECIPES,
+    FIRST_ORDER_DELAY_SEC, ORDER_SPAWN_INTERVAL_SEC, MAX_WAITING_ORDERS, BOARD_MARGIN_RIGHT,
+    ORDER_SPACING, ORDER_X, ORDER_Y
 )
 
 class App:
@@ -29,8 +29,8 @@ class App:
         pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Service Rush", display_scale=3)
         pyxel.load("assets/resources.pyxres")
         
-        self.__chef1 = Chef(chef_id=1, start_col=5, start_row=2)  
-        self.__chef2 = Chef(chef_id=2, start_col=5, start_row=6) 
+        self.__chef1 = Chef(chef_id=1, col=5, row=2)  
+        self.__chef2 = Chef(chef_id=2, col=5, row=6) 
 
         self.__score = 0
         self.__failures = 0
@@ -89,10 +89,6 @@ class App:
         if self.__timer_frames > 0:
             self.__timer_frames -= 1
 
-        if self.__timer_frames > 0:
-            self.__timer_frames -= 1
-
-        # 2. Generación aleatoria de comandas desde el diccionario RECIPES
         if self.__spawn_timer_frames > 0:
             self.__spawn_timer_frames -= 1
         else:
@@ -167,15 +163,21 @@ class App:
         self.__chef2.draw()
 
         # Draw score, failures, and timer
+        score_str = f"{self.__score}"
+        failures_str = f"{self.__failures}/{MAX_FAILURES}"
         total_sec = self.__timer_frames // FPS
-        minutos = total_sec // 60
-        segundos = total_sec % 60
-        time_str = f"{minutos:02d}:{segundos:02d}"
+        minutes = total_sec // 60
+        seconds = total_sec % 60
+        time_str = f"{minutes:02d}:{seconds:02d}"
 
-        pyxel.text(SCORE_X, SCORE_Y, f"SCORE: {self.__score}", TEXT_COLOR)        
-        pyxel.text(FAILURES_X, FAILURES_Y, f"FAILURES: {self.__failures}/{MAX_FAILURES}", TEXT_COLOR)
-        pyxel.text(TIMER_X, TIMER_Y, f"TIME: {time_str}", TEXT_COLOR)
+        score_x = SCREEN_WIDTH - (len(score_str) * 4) - BOARD_MARGIN_RIGHT
+        failures_x = SCREEN_WIDTH - (len(failures_str) * 4) - BOARD_MARGIN_RIGHT
+        timer_x = SCREEN_WIDTH - (len(time_str) * 4) - BOARD_MARGIN_RIGHT
+
+        pyxel.text(score_x, SCORE_Y, score_str, TEXT_COLOR)
+        pyxel.text(failures_x, FAILURES_Y, failures_str, TEXT_COLOR)
+        pyxel.text(timer_x, TIMER_Y, time_str, TEXT_COLOR)
 
         # Draw orders
         for i, order in enumerate(self.__orders):
-            order.draw(x=4 + (i * 42), y=4)
+            order.draw(x=ORDER_X + (i * ORDER_SPACING), y=ORDER_Y)
