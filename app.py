@@ -100,6 +100,27 @@ class App:
         for order in self.__orders:
             order.update()
 
+        # Chef´s movement
+        # Chef 1
+        if pyxel.btnp(pyxel.KEY_W):
+            self.__chef1.move("UP")
+        elif pyxel.btnp(pyxel.KEY_S):
+            self.__chef1.move("DOWN")
+        elif pyxel.btnp(pyxel.KEY_A):
+            self.__chef1.move("LEFT")
+        elif pyxel.btnp(pyxel.KEY_D):
+            self.__chef1.move("RIGHT")
+
+        # Chef 2
+        if pyxel.btnp(pyxel.KEY_UP):
+            self.__chef2.move("UP")
+        elif pyxel.btnp(pyxel.KEY_DOWN):
+            self.__chef2.move("DOWN")
+        elif pyxel.btnp(pyxel.KEY_LEFT):
+            self.__chef2.move("LEFT")
+        elif pyxel.btnp(pyxel.KEY_RIGHT):
+            self.__chef2.move("RIGHT")
+
     def draw(self):
         # Clear the screen with a white color
         pyxel.cls(7)

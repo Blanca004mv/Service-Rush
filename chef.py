@@ -1,6 +1,9 @@
 import pyxel
 from item import Item
-from constants import BOARD_HEIGHT, CHEF_SPRITES, ITEM_SIZE
+from constants import (
+    CHEF_SPRITES, ITEM_SIZE, MAX_COLUMNS, MIN_COLUMNS, CHEF_1_MAX_ROW, CHEF_1_MIN_ROW,
+    CHEF_2_MAX_ROW, CHEF_2_MIN_ROW, KITCHEN_LAYOUT, MIN_ROWS, MAX_ROWS
+)
 
 class Chef(Item):
     def __init__(self, chef_id:int, col:int, row:int):
@@ -19,7 +22,7 @@ class Chef(Item):
     def chef_id(self, value:int):
         # Check if its an integer
         if not isinstance(value, int):
-            raise ValueError("Chef ID must be an integer.")
+            raise TypeError("Chef ID must be an integer.")
         # Check if the value is either 1 or 2
         if value not in (1, 2):
             raise ValueError("Chef ID must be either 1 or 2.")
@@ -55,6 +58,68 @@ class Chef(Item):
             raise ValueError("Has dish must be a boolean.")
         self.__has_dish = value
 
+    def get_facing_element(self) -> str:
+        target_col, target_row = self.get_target_tile()
+
+        if MIN_COLUMNS<= target_col <= MAX_COLUMNS and MIN_ROWS <= target_row <= MAX_ROWS:
+            return KITCHEN_LAYOUT[target_row][target_col]
+        
+        return "OUT_OF_BOUNDS"
+    
+    # Movement restrictions
+    def is_valid_move(self, next_col: int, next_row: int) -> bool:
+        if not (MIN_COLUMNS<=next_col<=MAX_COLUMNS):
+            return False
+
+        if self.chef_id == 1 and not (CHEF_1_MIN_ROW <= next_row <= CHEF_1_MAX_ROW):
+            return False
+        if self.chef_id == 2 and not (CHEF_2_MIN_ROW <= next_row <= CHEF_2_MAX_ROW):
+            return False
+        
+        
+        target_element = KITCHEN_LAYOUT[next_row][next_col]
+        if target_element != "FREE":
+            return False
+
+        return True
+
+    # Move function
+    def move(self, direction: str):
+        self.direction = direction
+
+        next_col = self.col
+        next_row = self.row
+
+        # Calculate next move
+        if direction == "UP":
+            next_row -= 1
+        elif direction == "DOWN":
+            next_row += 1
+        elif direction == "LEFT":
+            next_col -= 1
+        elif direction == "RIGHT":
+            next_col += 1
+
+        # Actualize coordinates if possible
+        if self.is_valid_move(next_col, next_row):
+            self.col = next_col
+            self.row = next_row
+
+    # Collisions and interactions
+    def get_target_tile(self) -> tuple:
+        target_col = self.col
+        target_row = self.row
+
+        if self.direction == "UP":
+            target_row -= 1
+        elif self.direction == "DOWN":
+            target_row += 1
+        elif self.direction == "LEFT":
+            target_col -= 1
+        elif self.direction == "RIGHT":
+            target_col += 1
+    
+    
     # Draw the chef on the screen
     def draw(self):
 
