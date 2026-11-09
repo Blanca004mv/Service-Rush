@@ -1,4 +1,6 @@
 import pyxel
+from dish import Dish
+from ingredient import Ingredient
 from item import Item
 from constants import (
     CHEF_SPRITES, ITEM_SIZE, MAX_COLUMNS, MIN_COLUMNS, CHEF_1_MAX_ROW, CHEF_1_MIN_ROW,
@@ -11,13 +13,14 @@ class Chef(Item):
         self.chef_id = chef_id
         self.direction = "DOWN"
         self.has_dish = False
+        self.holding_item = None
 
     # Chef id property
     @property
     def chef_id(self):
         return self.__chef_id
 
-    #Chef id setter  
+    # Chef id setter  
     @chef_id.setter
     def chef_id(self, value:int):
         # Check if its an integer
@@ -58,14 +61,20 @@ class Chef(Item):
             raise ValueError("Has dish must be a boolean.")
         self.__has_dish = value
 
-    def get_facing_element(self) -> str:
-        target_col, target_row = self.get_target_tile()
+    # Holding item propery
+    @property
+    def holding_item(self):
+        """Devuelve el objeto que sostiene el chef (Dish o None)."""
+        return self.__holding_item
 
-        if MIN_COLUMNS<= target_col <= MAX_COLUMNS and MIN_ROWS <= target_row <= MAX_ROWS:
-            return KITCHEN_LAYOUT[target_row][target_col]
+    # Holding item setter
+    @holding_item.setter
+    def holding_item(self, value):
+        """Setter con comprobación de tipo (Dish o None)."""
+        if value is not None and not isinstance(value, Dish):
+            raise TypeError("Holding item must be an instance of Dish or None.")
+        self.__holding_item = value 
         
-        return "OUT_OF_BOUNDS"
-    
     # Movement restrictions
     def is_valid_move(self, next_col: int, next_row: int) -> bool:
         if not (MIN_COLUMNS<=next_col<=MAX_COLUMNS):
@@ -105,8 +114,8 @@ class Chef(Item):
             self.col = next_col
             self.row = next_row
 
-    # Collisions and interactions
-    def get_target_tile(self) -> tuple:
+    # Calculate chef´s looking tile
+    def get_target_tile(self) -> tuple[int,int]:
         target_col = self.col
         target_row = self.row
 
@@ -118,8 +127,48 @@ class Chef(Item):
             target_col -= 1
         elif self.direction == "RIGHT":
             target_col += 1
+
+        return target_col, target_row
+        
+    # 
+    def get_facing_element(self) -> str:
+        target_col, target_row = self.get_target_tile()
+
+        if MIN_COLUMNS<= target_col <= MAX_COLUMNS and MIN_ROWS <= target_row <= MAX_ROWS:
+            return KITCHEN_LAYOUT[target_row][target_col]
+        
+        return "OUT_OF_BOUNDS"
     
-    
+    # Interactions
+    def interact(self):
+        facing_element = self.get_facing_element()
+        target_col, target_row = self.get_target_tile()
+
+        # Empty hands case
+        if not self.has_dish:
+            if facing_element == "PLATES" and self.chef_id == 2:
+                self.holding_item = Dish()
+
+            # Other conditions ...
+
+        # Has a dish case
+        else:
+            dish = self.holding_item
+            
+            # If facing ingredients
+            if facing_element in ("TOMATO", "POTATO", "ONION", "CHORIZO", "EGG"):
+                ing_name = facing_element.lower()
+                new_ingredient = Ingredient(
+                    col=target_col, row=target_row, name=ing_name, state="raw"
+                )
+                dish.add_ingredient(new_ingredient)
+
+            # If facing bin
+            elif facing_element == "BIN":
+                dish.clear()
+
+            # Other conditions ...
+        
     # Draw the chef on the screen
     def draw(self):
 

@@ -1,13 +1,11 @@
 import pyxel
+from ingredient import Ingredient
 from constants import SPRITES, ITEM_SIZE, RECIPES
 
 class Dish:
-    def __init__(self, recipe_name: str, ingredients: list, is_clean: bool = True):
+    def __init__(self, recipe_name: str = None, is_clean: bool = True):
         self.recipe_name = recipe_name
-        if ingredients is None:
-            self.ingredients =[]
-        else: 
-            self.ingredients = ingredients
+        self.ingredients = []
         self.is_clean = is_clean
 
     # Recipe name property
@@ -37,7 +35,10 @@ class Dish:
     def ingredients(self, value: list):
         if not isinstance(value, list):
             raise TypeError("Ingredients must be a list.")
-        self.__ingredients = value
+        for item in value:
+            if not isinstance(item, Ingredient):
+                raise TypeError("All items in ingredients must be Ingredient objects.")
+            self.__ingredients = value
 
     # Is clean property
     @property
@@ -55,10 +56,10 @@ class Dish:
     def is_empty(self) -> bool:
         return len(self.__ingredients) == 0 and self.__recipe_name is None
 
-    def add_ingredient(self, ingredient_name: str):
-        if not isinstance(ingredient_name, str):
-            raise TypeError("Ingredient name must be a string.")
-        self.__ingredients.append(ingredient_name)
+    def add_ingredient(self, ingredient):
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("Item to add must be an instance of Ingredient.")
+        self.__ingredients.append(ingredient)
 
     def clear(self):
         self.__ingredients.clear()
