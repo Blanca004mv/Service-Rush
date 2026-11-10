@@ -112,7 +112,7 @@ class App:
             self.__chef1.move("RIGHT")
 
         if pyxel.btnp(pyxel.KEY_LSHIFT):
-            self.__chef1.interact()
+            self.__chef1.interact(self.__handovers)
 
         # Chef 2
         if pyxel.btnp(pyxel.KEY_UP):
@@ -125,7 +125,7 @@ class App:
             self.__chef2.move("RIGHT")
 
         if pyxel.btnp(pyxel.KEY_RSHIFT):
-            self.__chef2.interact()
+            self.__chef2.interact(self.__handovers)
 
     def draw(self):
         # Clear the screen with a white color

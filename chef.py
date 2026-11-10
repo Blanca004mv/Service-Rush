@@ -12,7 +12,6 @@ class Chef(Item):
         super().__init__(col, row)
         self.chef_id = chef_id
         self.direction = "DOWN"
-        self.has_dish = False
         self.holding_item = None
 
     # Chef id property
@@ -53,24 +52,14 @@ class Chef(Item):
     def has_dish(self):
         return self.holding_item is not None
 
-    # Has dish setter
-    @has_dish.setter
-    def has_dish(self, value:bool):
-        # Check if its a boolean
-        if not isinstance(value, bool):
-            raise ValueError("Has dish must be a boolean.")
-        self.__has_dish = value
-
-    # Holding item propery
+    # Holding item property
     @property
     def holding_item(self):
-        """Devuelve el objeto que sostiene el chef (Dish o None)."""
         return self.__holding_item
 
     # Holding item setter
     @holding_item.setter
     def holding_item(self, value):
-        """Setter con comprobación de tipo (Dish o None)."""
         if value is not None and not isinstance(value, Dish):
             raise TypeError("Holding item must be an instance of Dish or None.")
         self.__holding_item = value 
@@ -140,54 +129,79 @@ class Chef(Item):
         return "OUT_OF_BOUNDS"
     
     # Interactions
-    def interact(self):
-        facing_element = self.get_facing_element()
-        target_col, target_row = self.get_target_tile()
+    def interact(self, handovers: list):
+      facing_element = self.get_facing_element()
+      target_col, target_row = self.get_target_tile()
 
-        # Empty hands case
-        if not self.has_dish:
-            if facing_element == "PLATES" and self.chef_id == 2:
-                self.holding_item = Dish()
-                print(
-                    f"[DEBUG] Chef {self.chef_id} ha cogido un plato de la pila en"
-                    f" ({self.col}, {self.row})."
-                )
+      # If facing handover
+      if facing_element == "PASS":
+        target_handover = None
+        for ho in handovers:
+          if ho.col == target_col and ho.row == target_row:
+            target_handover = ho
+            break
 
-            # Other conditions ...
+        if target_handover is not None:
+          # Without dish and handover has a dish -> get dish
+          if not self.has_dish:
+            if not target_handover.is_empty():
+              self.holding_item = target_handover.dish
+              target_handover.dish = None
+              print(
+                  f"[DEBUG] Chef {self.chef_id} cogió un plato de PASS en"
+                  f" ({target_col}, {target_row})."
+              )
+          # With dish and handover is free -> leave dish
+          else:
+            if target_handover.is_empty():
+              target_handover.dish = self.holding_item
+              self.holding_item = None
+              print(
+                  f"[DEBUG] Chef {self.chef_id} dejó un plato en PASS en"
+                  f" ({target_col}, {target_row})."
+              )
 
-        # Has a dish case
-        else:
-            dish = self.holding_item
-            
-            # If facing ingredients
-            if facing_element in ("TOMATO", "POTATO", "ONION", "CHORIZO", "EGG"):
-                ing_name = facing_element.lower()
-                new_ingredient = Ingredient(
-                    col=target_col, row=target_row, name=ing_name, state="raw"
-                )
-                dish.add_ingredient(new_ingredient)
-                print(
-                    f"[DEBUG] Chef {self.chef_id} añadió '{ing_name}' al plato."
-                    f" Ingredientes en el plato: {dish.ingredients}"
-                )
+      # Empty hands
+      elif not self.has_dish:
+        # If facing plates and being second chef
+        if facing_element == "PLATES" and self.chef_id == 2:
+          self.holding_item = Dish()
+          print(
+              f"[DEBUG] Chef {self.chef_id} ha cogido un plato de la pila en"
+              f" ({self.col}, {self.row})."
+          )
 
-            # If facing bin
-            elif facing_element == "BIN":
-                dish.clear()
-                print(
-                    f"[DEBUG] Chef {self.chef_id} ha tirado el contenido al BIN."
-                    " Plato vacío."
-                )
+      # Fully hands
+      else:
+        dish = self.holding_item
 
-            # If facing board
-            elif facing_element == "BOARD":
-                dish.chop_ingredients()
-                print(
-                    f"[DEBUG] Chef {self.chef_id} ha procesado (picado) los"
-                    " ingredientes en la tabla."
-                )
-            
-            # Other conditions ...
+        # If facing ingredient
+        if facing_element in ("TOMATO", "POTATO", "ONION", "CHORIZO", "EGG"):
+          ing_name = facing_element.lower()
+          new_ingredient = Ingredient(
+              col=target_col, row=target_row, name=ing_name, state="raw"
+          )
+          dish.add_ingredient(new_ingredient)
+          print(
+              f"[DEBUG] Chef {self.chef_id} añadió '{ing_name}' al plato."
+              f" Ingredientes en el plato: {dish.ingredients}"
+          )
+
+        # If  facing bin
+        elif facing_element == "BIN":
+          dish.clear()
+          print(
+              f"[DEBUG] Chef {self.chef_id} ha tirado el contenido al BIN."
+              " Plato vacío."
+          )
+
+        # If facing board
+        elif facing_element == "BOARD":
+          dish.chop_ingredients()
+          print(
+              f"[DEBUG] Chef {self.chef_id} ha procesado (picado) los"
+              " ingredientes en la tabla."
+          )
         
     # Draw the chef on the screen
     def draw(self):
