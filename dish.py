@@ -5,7 +5,7 @@ from constants import SPRITES, ITEM_SIZE, RECIPES
 class Dish:
     def __init__(self, recipe_name: str = None, is_clean: bool = True):
         self.recipe_name = recipe_name
-        self.ingredients = []
+        self.__ingredients = []
         self.is_clean = is_clean
 
     # Recipe name property
@@ -64,6 +64,10 @@ class Dish:
     def clear(self):
         self.__ingredients.clear()
         self.__recipe_name = None
+
+    def chop_ingredients(self):
+        for ingredient in self.__ingredients:
+            ingredient.chop()
 
     def draw(self, x: int, y: int):
         if not self.is_clean:

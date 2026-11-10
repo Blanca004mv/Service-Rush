@@ -51,7 +51,7 @@ class Chef(Item):
     # Has dish property
     @property
     def has_dish(self):
-        return self.__has_dish
+        return self.holding_item is not None
 
     # Has dish setter
     @has_dish.setter
@@ -130,7 +130,7 @@ class Chef(Item):
 
         return target_col, target_row
         
-    # 
+    # Get the facing element
     def get_facing_element(self) -> str:
         target_col, target_row = self.get_target_tile()
 
@@ -148,6 +148,10 @@ class Chef(Item):
         if not self.has_dish:
             if facing_element == "PLATES" and self.chef_id == 2:
                 self.holding_item = Dish()
+                print(
+                    f"[DEBUG] Chef {self.chef_id} ha cogido un plato de la pila en"
+                    f" ({self.col}, {self.row})."
+                )
 
             # Other conditions ...
 
@@ -162,11 +166,27 @@ class Chef(Item):
                     col=target_col, row=target_row, name=ing_name, state="raw"
                 )
                 dish.add_ingredient(new_ingredient)
+                print(
+                    f"[DEBUG] Chef {self.chef_id} añadió '{ing_name}' al plato."
+                    f" Ingredientes en el plato: {dish.ingredients}"
+                )
 
             # If facing bin
             elif facing_element == "BIN":
                 dish.clear()
+                print(
+                    f"[DEBUG] Chef {self.chef_id} ha tirado el contenido al BIN."
+                    " Plato vacío."
+                )
 
+            # If facing board
+            elif facing_element == "BOARD":
+                dish.chop_ingredients()
+                print(
+                    f"[DEBUG] Chef {self.chef_id} ha procesado (picado) los"
+                    " ingredientes en la tabla."
+                )
+            
             # Other conditions ...
         
     # Draw the chef on the screen
